@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Opportunity Audit - Escape the 9&ndash;5</title>
+<style>
+  :root {
+    --teal:     #00B5AD;
+    --teal-l:   #E0F7F6;
+    --teal-d:   #007A75;
+    --orange:   #F47421;
+    --orange-l: #FFF0E6;
+    --orange-d: #C05A10;
+    --navy:     #1B3A48;
+    --mid:      #4A6070;
+    --muted:    #7A909E;
+    --light:    #F5F7F8;
+    --border:   #DDE3E7;
+    --white:    #FFFFFF;
+    --black:    #111111;
+    --red:      #C62828;
+    --red-l:    #FFEBEE;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #ECEEF0;
+    color: var(--black);
+    line-height: 1.6;
+    font-size: 13px;
+  }
+
+  /* HEADER */
+  .hdr { background: var(--navy); color: #fff; padding: 40px 56px 32px; border-bottom: 4px solid var(--teal); }
+  .hdr-meta { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+  .hdr h1 { font-size: 30px; font-weight: 700; color: #fff; letter-spacing: -.3px; margin-bottom: 4px; }
+  .hdr h2 { font-size: 15px; color: var(--orange); font-weight: 400; margin-bottom: 18px; }
+  .hdr-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hdr-pill { display: inline-block; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); color: rgba(255,255,255,.75); padding: 5px 18px; border-radius: 3px; font-size: 14px; }
+  .hdr-pill.accent { background: var(--orange); border-color: var(--orange); color: #fff; font-weight: 400; }
+
+  /* LAYOUT */
+  .wrap { max-width: 1260px; margin: 0 auto; padding: 40px 32px; }
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .mb { margin-bottom: 24px; }
+  .mb-sm { margin-bottom: 14px; }
+
+  /* SECTION LABEL */
+  .sec-label { font-size: 14px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--orange); margin: 40px 0 16px; display: flex; align-items: center; gap: 12px; }
+  .sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* CARDS */
+  .card { background: var(--white); border-radius: 6px; padding: 28px 32px; border: 1px solid var(--border); }
+  .card-hdr { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .card-title { font-size: 15px; font-weight: 700; color: var(--black); margin-bottom: 10px; line-height: 1.3; }
+
+  /* SCORE */
+  .score-panel { background: var(--navy); border-radius: 6px; padding: 32px; }
+  .score-eyebrow { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+  .score-num { font-size: 80px; font-weight: 900; color: var(--teal); line-height: 1; }
+  .score-denom { font-size: 28px; color: var(--orange); font-weight: 300; }
+  .score-verdict { font-size: 18px; font-weight: 600; color: #fff; margin-top: 8px; }
+  .score-range { display: inline-block; margin-top: 10px; background: rgba(0,181,173,.12); border: 1px solid rgba(0,181,173,.3); color: #fff; padding: 4px 16px; border-radius: 3px; font-size: 11px; font-weight: 400; letter-spacing: 1px; }
+  .bar-row { margin-top: 28px; }
+  .bar-item { margin-bottom: 13px; }
+  .bar-item:last-child { margin-bottom: 0; }
+  .bar-meta { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .bar-lbl { font-size: 12px; color: rgba(255,255,255,.7); }
+  .bar-val { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.9); }
+  .bar-track { height: 6px; background: rgba(255,255,255,.1); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; }
+
+  /* STAT STRIP */
+  .stat-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-top: 20px; }
+  .stat-cell { background: var(--white); padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .stat-cell > div:last-child { margin-top: auto; padding-top: 6px; }
+  .stat-v { font-size: 20px; font-weight: 800; color: var(--orange); }
+  .stat-l { font-size: 12px; color: var(--mid); margin-top: 3px; }
+
+  /* BADGES */
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 3px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; }
+  .b-teal   { background: var(--teal-l);   color: var(--teal-d); }
+  .b-orange { background: var(--orange-l); color: var(--orange-d); }
+  .b-navy   { background: rgba(27,58,72,.08); color: var(--navy); }
+  .b-muted  { background: var(--light);    color: var(--muted); }
+
+  /* ITEMS */
+  .item { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px; }
+  .item:last-child { margin-bottom: 0; }
+  .item-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+  .icon-teal   { background: var(--teal-l);   color: var(--teal-d); }
+  .icon-orange { background: var(--orange-l); color: var(--orange-d); }
+  .icon-navy   { background: rgba(27,58,72,.08); color: var(--navy); }
+  .item-t { font-size: 15px; font-weight: 700; color: var(--teal-d); margin-bottom: 3px; }
+  .item-b { font-size: 12px; color: var(--mid); line-height: 1.6; }
+
+  /* CALLOUTS */
+  .callout { border-left: 3px solid var(--teal); background: var(--teal-l); padding: 14px 18px; border-radius: 0 4px 4px 0; font-size: 12px; color: var(--navy); line-height: 1.65; }
+  .callout-orange { border-left-color: var(--orange); background: var(--orange-l); }
+  .callout strong { color: var(--black); }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: var(--navy); color: rgba(255,255,255,.85); padding: 9px 12px; text-align: left; font-weight: 600; font-size: 10px; letter-spacing: .5px; text-transform: uppercase; }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--mid); }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: var(--light); }
+  .tc { text-align: center; } .tr { text-align: right; }
+
+  /* KW PILLS */
+  .kw { display: inline-block; background: var(--teal-l); color: var(--teal-d); border: 1px solid rgba(0,181,173,.2); border-radius: 3px; padding: 3px 10px; font-size: 11px; font-weight: 600; margin: 3px; }
+  .kw span { color: var(--teal-d); font-weight: 700; }
+
+  /* STEPS */
+  .step { display: flex; gap: 16px; align-items: flex-start; padding: 18px 20px; border-radius: 4px; margin-bottom: 10px; }
+  .step:last-child { margin-bottom: 0; }
+  .step-teal   { background: var(--teal-l);   border-left: 4px solid var(--teal); }
+  .step-orange { background: var(--orange-l); border-left: 4px solid var(--orange); }
+  .step-num { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0; color: #fff; }
+  .num-teal   { background: var(--teal); }
+  .num-orange { background: var(--orange); }
+  .step-t { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 4px; }
+  .step-b { font-size: 12px; color: var(--mid); line-height: 1.55; }
+
+  /* BANNER */
+  .banner { background: var(--navy); color: #fff; border-radius: 6px; padding: 24px 32px; margin-bottom: 24px; }
+  .banner h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--teal); }
+  .banner p  { font-size: 12px; color: var(--orange); line-height: 1.65; }
+  .banner-stat { display: inline-block; background: var(--teal); border: 1px solid var(--teal-d); color: #fff; padding: 8px 18px; border-radius: 3px; font-size: 14px; font-weight: 400; margin: 8px 6px 0 0; }
+
+  /* HARDBACK CARD */
+  .hb-card { background: var(--white); border: 1px solid var(--border); border-top: 4px solid var(--teal); border-radius: 6px; padding: 28px 32px; margin-bottom: 24px; }
+  .hb-eyebrow { font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--teal-d); margin-bottom: 8px; }
+
+  /* ACTION REQUIRED */
+  .action-required { background: var(--red); color: #fff; border-radius: 6px; padding: 24px 32px; margin-top: 32px; display: flex; gap: 20px; align-items: flex-start; }
+  .ar-icon  { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+  .ar-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+  .ar-body  { font-size: 12px; color: rgba(255,255,255,.85); line-height: 1.65; }
+
+  /* FOOTER */
+  .ftr { background: var(--navy); color: rgba(255,255,255,.35); text-align: center; padding: 22px; font-size: 11px; }
+
+  @media(max-width:900px){
+    .g2{ grid-template-columns:1fr; }
+    .hdr{ padding:24px 20px; }
+    .wrap{ padding:24px 16px; }
+    .score-num{ font-size:56px; }
+  }
+  @media(max-width:600px){
+    html,body{ overflow-x:hidden; }
+    .hdr{ padding:16px; }
+    .hdr h1{ font-size:22px; }
+    .hdr h2{ font-size:13px; }
+    .hdr-pill{ font-size:12px; padding:4px 12px; }
+    .wrap{ padding:16px 12px; }
+    .g2{ grid-template-columns:1fr; gap:14px; }
+    .card{ padding:18px 16px; }
+    .score-panel{ padding:20px 16px; }
+    .score-num{ font-size:48px; }
+    .score-denom{ font-size:20px; }
+    .score-verdict{ font-size:15px; }
+    .stat-strip{ grid-template-columns:1fr; }
+    .stat-cell{ padding:12px; }
+    .site-nav a{ font-size:11px; padding:7px 10px; }
+    .site-nav{ gap:6px; padding:8px 10px; }
+    .hb-eyebrow{ font-size:14px; }
+    .step{ padding:12px 14px; }
+    .banner-stat{ font-size:12px; padding:6px 12px; }
+    .item-t{ font-size:13px; }
+    .sec-label{ font-size:11px; }
+    table{ font-size:11px; }
+    th,td{ padding:7px 8px; }
+  }
+
+  .tip { position: relative; display: inline-flex; align-items: center; gap: 5px; }
+  .tip-q { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,.15); color: rgba(255,255,255,.55); font-size: 8px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; cursor: default; flex-shrink: 0; }
+  .tip-box { display: none; position: absolute; left: 0; bottom: calc(100% + 8px); background: #fff; color: #1B3A48; font-size: 11px; line-height: 1.55; padding: 9px 12px; border-radius: 4px; width: 210px; box-shadow: 0 4px 20px rgba(0,0,0,.25); z-index: 100; pointer-events: none; }
+  .tip-box::after { content: ''; position: absolute; top: 100%; left: 8px; border: 5px solid transparent; border-top-color: #fff; }
+  .tip:hover .tip-box { display: block; }
+
+  /* FLOATING NAV */
+  body { padding-top:116px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; z-index:200; background:#00B5AD; border-bottom:none; display:flex; justify-content:center; gap:10px; padding:10px 20px; overflow-x:auto; }
+  .site-nav a { display:inline-flex; align-items:center; color:#fff; font-size:13px; font-weight:400; letter-spacing:.4px; padding:10px 16px; text-decoration:none; border:1px solid rgba(255,255,255,.6); white-space:nowrap; transition:color .15s,background .15s; flex-shrink:0; background:rgba(0,0,0,.15); border-radius:4px; }
+  .site-nav a:hover { background:rgba(0,0,0,.25); }
+  .site-nav a.active { font-weight:700; background:rgba(255,255,255,.25); border-color:#fff; }
+  [id] { scroll-margin-top:120px; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-meta">Book Opportunity Audit &nbsp;&middot;&nbsp; June 2026 &nbsp;&middot;&nbsp; Confidential</div>
+  <h1>Escape the 9&ndash;5</h1>
+  <h2>A Personal Transformation Self-Help Guide to Starting a Freedom-Based Business</h2>
+  <div class="hdr-pills">
+    <span class="hdr-pill">Author: Dina Ramadan</span>
+    <span class="hdr-pill">Format: Kindle Ebook</span>
+    <span class="hdr-pill">Niche: Business Self-Help</span>
+    <span class="hdr-pill accent">Score: 43 / 100 &ndash; Developing Opportunity</span>
+  </div>
+</div>
+<div style="position:fixed;top:0;left:0;right:0;z-index:201;background:#1B3A48;height:58px;"></div>
+<nav class="site-nav" style="top:58px;">
+  <a href="#score"><span style="font-size:16px;color:#F47421;line-height:1;">&#8594;</span>&nbsp; Opportunity Score</a>
+  <a href="#marketing"><span style="font-size:16px;color:#F47421;line-height:1;">&#8594;</span>&nbsp; Marketing Strategy</a>
+  <a href="#market"><span style="font-size:16px;color:#F47421;line-height:1;">&#8594;</span>&nbsp; Market Analysis</a>
+  <a href="#competitors"><span style="font-size:16px;color:#F47421;line-height:1;">&#8594;</span>&nbsp; Competitors</a>
+  <a href="#keywords"><span style="font-size:16px;color:#F47421;line-height:1;">&#8594;</span>&nbsp; Keywords</a>
+  <a href="#quick-wins"><span style="font-size:16px;color:#F47421;line-height:1;">&#8594;</span>&nbsp; Quick Wins</a>
+</nav>
+
+<div class="wrap" id="score">
+
+<!-- SCORE + SUMMARY -->
+<div class="g2 mb">
+  <div class="score-panel">
+    <div style="display:flex;gap:24px;align-items:center;margin-bottom:20px;">
+      <div style="flex:1;min-width:0;">
+        <div class="score-eyebrow">Author Opportunity Score</div>
+        <div><span class="score-num">43</span><span class="score-denom">&thinsp;/ 100</span></div>
+        <div class="score-verdict">Developing Opportunity</div>
+        <div class="score-range">40 to 59 Range</div>
+      </div>
+      <div style="flex-shrink:0;">
+        <img src="dina-ramadan-cover.jpg" alt="Escape the 9-5 by Dina Ramadan" style="width:130px;border-radius:6px;box-shadow:0 6px 24px rgba(0,0,0,.5);display:block;">
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-item">
+        <div class="bar-meta"><span class="bar-lbl tip">Demand <span class="tip-q">?</span><span class="tip-box">How much buyer demand exists for this niche on Amazon, based on the number of books actively selling and estimated monthly revenue.</span></span><span class="bar-val">13 / 20</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:65%;background:var(--teal);"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-meta"><span class="bar-lbl tip">Competition <span class="tip-q">?</span><span class="tip-box">How competitive this niche is on Amazon. Lower scores mean less competition and more room to rank. Higher scores mean a more crowded niche.</span></span><span class="bar-val">15 / 20</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:75%;background:var(--teal);"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-meta"><span class="bar-lbl tip">Reviews <span class="tip-q">?</span><span class="tip-box">The number of verified customer reviews your book currently has. Reviews build trust and are one of the biggest drivers of Amazon sales conversions.</span></span><span class="bar-val">3 / 20</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:15%;background:var(--orange);"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-meta"><span class="bar-lbl tip">Growth Potential <span class="tip-q">?</span><span class="tip-box">How ready your book is to expand your catalogue, factoring in current reviews, ad activity, and the number of additional titles possible in this niche.</span></span><span class="bar-val">12 / 20</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--teal);"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-meta"><span class="bar-lbl tip">Amazon Ads <span class="tip-q">?</span><span class="tip-box">An Amazon ad campaign will help you sell more books. We recommend having at least 5 reviews before running ads, as reviews significantly improve conversion rates.</span></span><span class="bar-val">Not Active &middot; Ready When Reviews Are In Place</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:0%;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:20px;">
+    <div class="card">
+      <div class="card-hdr">Book Summary</div>
+      <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:20px;"><em><strong style="font-style:italic;font-weight:400;">Escape the 9&ndash;5</strong> gives aspiring entrepreneurs the mindset shifts, practical steps, and strategy to leave employment and build a freedom-based business. A pre-order is already live and appearing on page one for your primary target keywords.</em><br><br><strong>Searches for &ldquo;freedom based business&rdquo; are already finding your book with zero reviews and a brand new listing. The top competitor has 143 reviews. With social proof and a targeted ad strategy, you have a clear path to owning this keyword.</strong></p>
+      <div class="stat-strip">
+        <div class="stat-cell"><div class="stat-v">5+</div><div class="stat-l">Books Selling Well In This Niche</div><div><span style="display:inline-block;margin-top:6px;font-size:11px;background:#e0f7f4;color:#007A75;padding:2px 12px;border-radius:20px;font-weight:700;">✓ Low Competition</span></div></div>
+        <div class="stat-cell"><div class="stat-v">~$2,200</div><div class="stat-l">KDP Niche Revenue / Month</div><div><span style="display:inline-block;margin-top:6px;font-size:11px;background:#e0f7f4;color:#007A75;padding:2px 12px;border-radius:20px;font-weight:700;">✓ Real Demand</span></div></div>
+        <div class="stat-cell"><div class="stat-v">Self-Help</div><div class="stat-l">Content Type</div><div><span style="display:inline-block;margin-top:6px;font-size:11px;background:#e0f7f4;color:#007A75;padding:2px 12px;border-radius:20px;font-weight:700;">✓ Stays Relevant</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hdr">Professional Assessment</div>
+      <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:14px;">&ldquo;Freedom based business&rdquo; is a keyword with real search demand, and your book is already being found for it with zero reviews and a brand new listing. That is an unusually strong organic signal. Your title, subtitle, and positioning are already doing exactly what Amazon needs to see.<br><br>The conversion challenge is real: a buyer who finds your listing today sees no social proof and is unlikely to buy. Five genuine reviews will change that immediately. Once they are in place, a Sponsored Products campaign targeting the dominant ASIN in this niche can drive consistent, measurable sales.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <span class="badge b-orange">No Reviews Yet</span>
+        <span class="badge b-orange">No Ads Active</span>
+        <span class="badge b-navy">Keywords to Confirm</span>
+        <span class="badge b-navy">Pricing Worth Reviewing</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KEY FINDING BANNER -->
+<div class="banner mb">
+  <h3 style="color:var(--orange);">Being Found Already: Reviews and Ads Are the Missing Pieces</h3>
+  <p style="color:#fff;">Escape the 9&ndash;5 is already being found for its primary keyword with zero reviews and a brand new listing. That tells us the listing is constructed correctly. The top competitor has 143 reviews and is generating around $2,200 per month. A second new book in this space, released just weeks ago, is already running ads with only 5 reviews. That tells us ads work here even early on. The gap between where this book is now and where it could be is not visibility. It is social proof and a targeted ad strategy.</p>
+  <div>
+    <span class="banner-stat">Top Competitor: 143 Reviews</span>
+    <span class="banner-stat">Niche Revenue: ~$2,200/mo</span>
+    <span class="banner-stat">Organic Position: #4 Already</span>
+  </div>
+</div>
+
+<!-- MARKETING STRATEGY -->
+<div id="marketing" style="position:relative;top:-48px;"></div>
+<div class="sec-label">Marketing Strategy</div>
+
+<!-- STEP 1: KEYWORDS -->
+<div class="card mb">
+  <div class="hb-eyebrow">Step 1 - Add Your Keywords to KDP</div>
+  <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:16px;">If you have not already done so, adding the right keywords to your KDP listing is one of the highest-impact actions you can take. Amazon uses your keywords to decide which searches your book appears in. Confirming all seven fields are fully optimised takes 10 minutes and costs nothing.</p>
+  <div style="background:var(--navy);border-radius:4px;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:14px;">
+    <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);white-space:nowrap;">Target Keyword #1</span>
+    <span style="font-size:16px;font-weight:700;color:var(--teal);letter-spacing:.3px;">freedom based business book</span>
+    <span style="font-size:11px;color:rgba(255,255,255,.55);margin-left:auto;">Low Competition &middot; High Demand &middot; Enter First in KDP</span>
+  </div>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Lead with &ldquo;freedom based business book&rdquo; in field one</div>
+      <div class="item-b">This is your #1 target. It is actively searched, directly relevant, and has moderate competition for the demand level it carries. Make it the very first entry in your KDP keyword list. Then fill all remaining six fields with the supporting terms from the Keywords section of this audit.</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Use all 7 keyword fields</div>
+      <div class="item-b">KDP gives you 7 keyword fields, each supporting up to 50 characters. Use every one. Think about how your reader searches, not how you would describe your book. Phrases like &ldquo;how to start a freedom based business&rdquo; or &ldquo;escape the 9 to 5 book&rdquo; are more valuable than broad single words.</div>
+    </div>
+  </div>
+  <div class="item" style="margin-bottom:0;">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">What not to do</div>
+      <div class="item-b">Do not repeat words already in your title or subtitle. Do not use competitor names, celebrity names, or misleading terms. Amazon has tightened its algorithm and listings with irrelevant or manipulative keywords risk being suppressed. Keep them accurate and specific.</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:20px;"><span style="font-size:28px;color:#F47421;line-height:1;">&#8595;</span></div>
+</div>
+
+<!-- STEP 2: COMPETITOR ANALYSIS -->
+<div class="card mb">
+  <div class="hb-eyebrow">Step 2 - Analyse Your Competing Books</div>
+  <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:16px;">Before promoting your book, understand what you are up against. The best-selling books in your niche are bestsellers for a reason. Study them and use what you learn to make your own listing, content, and positioning stronger.</p>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Study &ldquo;The Freedom-Based Business Method&rdquo; closely</div>
+      <div class="item-b">This is the number one organic result for your primary keyword. It has 143 reviews, a BSR of 33,574, is selling 11 to 14 copies per day, and generating around $2,200 per month at &pound;10.99. Look at its cover, description, table of contents, and the language buyers use in its reviews. That is a blueprint for what this audience responds to.</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Read its reviews carefully</div>
+      <div class="item-b">Positive reviews tell you what buyers value most. Critical reviews tell you what is missing. If readers of the leading competitor say it lacks practical implementation steps, that is a gap you can fill in your positioning. Look for patterns across multiple reviews, not individual opinions.</div>
+    </div>
+  </div>
+  <div class="item" style="margin-bottom:0;">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Buy the top performer if you can</div>
+      <div class="item-b">Reading the competition is an investment, not an expense. Understanding why &ldquo;The Freedom-Based Business Method&rdquo; sells is the fastest way to produce a listing and positioning that competes with it directly.</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:20px;"><span style="font-size:28px;color:#F47421;line-height:1;">&#8595;</span></div>
+</div>
+
+<!-- STEP 3: REVIEWS -->
+<div class="card mb">
+  <div class="hb-eyebrow">Step 3 - Get Some Ratings and Reviews</div>
+  <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:14px;">Amazon distinguishes between ratings and reviews. A rating is simply a star score with no written comment, while a review includes written feedback alongside the stars. Both count towards your overall star rating and help your book appear credible to buyers, but written reviews carry more weight because they give shoppers context and confidence.</p>
+  <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:16px;">Your book is already being found for your primary keyword. The missing piece is what happens when a buyer lands on your listing and sees zero social proof. This is the most urgent step before you spend anything on ads.</p>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Ask for a rating or review inside your book</div>
+      <div class="item-b">Add a short, genuine request at the back of your book asking readers to leave a rating or review if they found it useful. Also add one in the middle of the book as many readers never reach the final pages. Keep it natural and never ask for a 5-star review specifically as Amazon takes a dim view of this and readers find it off-putting.</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Aim for 10 to 15 ratings and reviews before promoting</div>
+      <div class="item-b">Social proof is the single most important factor in converting browsers into buyers on Amazon. Aim for 10 to 15 combined ratings and reviews before you expect consistent organic sales. Do not launch Amazon Ads until you have at least 5 as a listing without social proof will waste your budget.</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Use an ARC service to reach readers before launch</div>
+      <div class="item-b">ARC (Advance Review Copy) services such as BookSirens and Hidden Gems connect authors with readers who have opted in to receive free books in exchange for honest reviews. These services are legitimate, widely used, and fully compliant with Amazon&rsquo;s terms of service. They are one of the most effective ways to build early social proof. Do not pay anyone to leave a positive review and do not use services that guarantee a specific star rating. Honest reviews from genuine readers are the only ones worth having.</div>
+    </div>
+  </div>
+  <div class="item" style="margin-bottom:0;">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Promote to communities where your readers already gather</div>
+      <div class="item-b">Freedom lifestyle, entrepreneurship, and career change communities are where Dina&rsquo;s readers already gather. Facebook groups focused on escaping the 9-to-5, business freedom, and working for yourself are natural homes. LinkedIn is also strong for this audience, particularly among professionals considering leaving employment. Reddit communities including r/financialindependence, r/Entrepreneur, and r/personalfinance collectively reach millions of readers who are actively exploring exactly what this book covers. These are not places to post a link. They are places to contribute genuinely, build credibility, and let the book surface naturally through your presence.</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:20px;"><span style="font-size:28px;color:#F47421;line-height:1;">&#8595;</span></div>
+</div>
+
+<!-- STEP 4: HARDBACK / PAPERBACK -->
+<div class="hb-card mb">
+  <div class="hb-eyebrow">Step 4 - Publish a Paperback Edition</div>
+  <div class="g2" style="gap:32px;align-items:start;">
+    <div>
+      <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:20px;">Once you are confident in your listing and have some reviews, publishing a paperback edition is a straightforward next step that opens a second revenue stream with no additional editorial work. In the business self-help category, many buyers actively prefer print. They highlight pages, write notes in margins, and keep books on their desks for ongoing reference.</p>
+      <div class="item">
+        <div class="item-icon icon-orange">&#10003;</div>
+        <div>
+          <div class="item-t">Price it to earn a meaningful royalty</div>
+          <div class="item-b">KDP Print books have a minimum list price based on page count and trim size. The royalty is 60% of the list price minus the printing cost. To clear at least &pound;5 per copy, the book needs to be priced high enough to cover KDP&rsquo;s printing fee and still leave that margin on top. In a professional niche where buyers expect to pay for specialist content, a higher price point is entirely justified.</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-orange">&#10003;</div>
+        <div>
+          <div class="item-t">Business books are reference books</div>
+          <div class="item-b">Self-help and business books in print are regularly gifted, highlighted, and kept on desks for reference. Readers who are serious about changing their career or launching a business often want a physical copy they can annotate. A paperback edition would add a second revenue stream and put the book in front of buyers who actively prefer print.</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-orange">&#10003;</div>
+        <div>
+          <div class="item-t">Print formats perform better in Amazon Ads</div>
+          <div class="item-b">Print formats tend to earn higher royalties per sale than ebooks, particularly in the business category where readers expect to pay for professional content. A paperback on the same listing increases your average selling price and gives Amazon more formats to surface in search results.</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-orange">&#10003;</div>
+        <div>
+          <div class="item-t">Both formats appear on the same listing</div>
+          <div class="item-b">Once the paperback is live, both formats appear on the same Amazon product page. Buyers choose their preferred format, and you earn from both.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;">Print Books Generating Revenue in Adjacent Niches</p>
+      <table style="margin-bottom:16px;">
+        <thead><tr><th>Title</th><th class="tc">Format</th><th class="tr">Rev / Mo</th></tr></thead>
+        <tbody>
+          <tr><td>Inside the Mind of Sales</td><td class="tc">Paperback</td><td class="tr">~&pound;196</td></tr>
+          <tr><td>$100M Money Models</td><td class="tc">Hardcover</td><td class="tr">~&pound;200</td></tr>
+          <tr><td>$100M Leads</td><td class="tc">Hardcover</td><td class="tr">~&pound;450</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <strong>The takeaway:</strong> Business self-help buyers are willing to pay for print. A paperback edition at a credible price point would earn more per sale than the current Kindle price and open the book to a second segment of buyers.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 5: SENSE CHECK -->
+<div class="card mb" style="border-left:4px solid var(--teal);">
+  <div class="hb-eyebrow">Step 5 - Sense Check Before You Spend</div>
+  <p style="font-size:15px;color:var(--mid);line-height:1.7;">This is not a new niche. There are already books in the freedom-based business and career change space generating real monthly revenue. Your listing is already being found organically. If you have studied the competition, your description is strong, and you are confident your book delivers on its promise, you are ready for Step 6. If you are not yet confident in the listing, go back and strengthen the cover, description, or keywords first.<br><br><strong>Spending money on ads for a book that is not ready is the fastest way to lose your budget.</strong></p>
+  <div style="text-align:center;margin-top:20px;"><span style="font-size:28px;color:#F47421;line-height:1;">&#8595;</span></div>
+</div>
+
+<!-- STEP 6: AMAZON ADS -->
+<div class="card mb">
+  <div class="hb-eyebrow">Step 6 - Amazon Advertising</div>
+  <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:14px;">Once you have reviews and confidence in your listing, Amazon Sponsored Products advertising can become one of the most effective and rewarding revenue channels available to a self-published author. The principle is straightforward: you invest a controlled daily budget, and if your campaign is optimised correctly, every pound you spend returns more than a pound in royalties.</p>
+  <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:14px;">Unlike most forms of marketing, Amazon Ads are directly measurable. You can see exactly what you are spending, what is converting, and what your return is in real time. This means you can forecast your sales with a level of precision that most businesses can only dream of.</p>
+  <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:16px;font-weight:700;">There is real risk in getting it wrong, so seek support if you are unsure. Start with a budget of &pound;5 to &pound;10 per day, test the data, and only scale what is demonstrably working.</p>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Understand your ACoS</div>
+      <div class="item-b">ACoS stands for Advertising Cost of Sale, the percentage of each sale that goes towards your ad spend. If your book earns &pound;5 in royalties and you spend &pound;2 on ads to make that sale, your ACoS is 40%. A target ACoS of 30 to 40% is a solid benchmark for KDP books.</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Optimise before you scale</div>
+      <div class="item-b">Pause keywords that spend without converting. Lower bids on high-ACoS terms. Increase bids on what is working. Do not increase your budget until your ACoS is consistently within your target range.</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Scale what works</div>
+      <div class="item-b">Once you find a profitable ACoS that holds consistently, increase your daily budget with confidence. Every pound you put in returns more than a pound in royalties. The ceiling is not your budget. It is the total demand for books in your niche.</div>
+    </div>
+  </div>
+</div>
+
+<!-- STRENGTHS + GROWTH -->
+<div id="market" style="position:relative;top:-48px;"></div>
+<div class="sec-label">Market Analysis</div>
+<div class="g2 mb">
+  <div class="card">
+    <div class="card-hdr">What Is Working Well</div>
+    <div class="item">
+      <div class="item-icon icon-orange">&#10003;</div>
+      <div>
+        <div class="item-t">Being Found for &ldquo;Freedom Based Business&rdquo; from Day One</div>
+        <div class="item-b">Your book is appearing in searches for &ldquo;freedom based business&rdquo; with zero reviews and a brand new listing. That is a strong early signal that Amazon has understood what your book is and who it is for. It is the result of a well-constructed title, subtitle, and listing that maps directly to what buyers are searching for.</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon icon-orange">&#10003;</div>
+      <div>
+        <div class="item-t">Strong Title and Subtitle Keyword Alignment</div>
+        <div class="item-b">The title &ldquo;Escape the 9&ndash;5&rdquo; and subtitle together map directly onto the language buyers actually search for. &ldquo;Freedom-based business&rdquo; appears in the subtitle and is also the primary search term. That alignment tells Amazon and shoppers exactly what the book is about without any ambiguity.</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon icon-orange">&#10003;</div>
+      <div>
+        <div class="item-t">A Pre-Order Already on Page One</div>
+        <div class="item-b">The audit notes indicate Dina has a second Kindle title in pre-order that is already appearing on page one for the target keywords. That is exceptional early catalogue positioning. Two books on the same keyword page multiplies visibility and creates cross-sell potential from one title to the other.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr">Growth Opportunities</div>
+    <div class="item">
+      <div class="item-icon icon-orange">&rarr;</div>
+      <div>
+        <div class="item-t">First Reviews Are the Priority</div>
+        <div class="item-b">Zero reviews is the biggest conversion barrier on the listing right now. Readers who find the book are seeing social proof of zero, which is a reason not to buy regardless of how good the cover and description are. Getting to five genuine reviews via ARC services, a direct request to early readers, or both, should happen before any ad spend.</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon icon-orange">&rarr;</div>
+      <div>
+        <div class="item-t">ASIN Targeting Ads Against the Category Leader</div>
+        <div class="item-b">&ldquo;The Freedom-Based Business Method&rdquo; (ASIN: B0DSK7C5ZK) has a BSR of 33,574 and is generating around $2,200 per month. Running a Sponsored Products ad targeting this ASIN puts Escape the 9&ndash;5 directly in front of buyers already browsing the most popular book in the niche. High intent, proven interest, relevant audience. A second book (The Wealth Creation Method, B0GSFY5K2D) launched in May 2026 with just 5 reviews and appears to already be running ads, which is a strong signal that cost-per-click in this niche is low enough to justify early ad activity.</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon icon-teal">&uarr;</div>
+      <div>
+        <div class="item-t">&ldquo;Freedom Based Business Model&rdquo; as a Second Title</div>
+        <div class="item-b">The keyword &ldquo;freedom based business model&rdquo; was identified in this audit as a more profitable adjacent term. A second book targeting this phrase would sit alongside Escape the 9&ndash;5 on keyword search pages, cross-sell readers, and deepen the catalogue. As the pre-order demonstrates, Dina is already thinking in series. This is the natural next title to plan.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPETITORS -->
+<div id="competitors" style="position:relative;top:-48px;"></div>
+<div class="sec-label">Competitors</div>
+<div class="card mb">
+  <div class="g2" style="gap:32px;align-items:start;">
+    <div>
+      <div class="card-hdr">Who You Are Up Against</div>
+      <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:16px;">The dominant title for &ldquo;freedom based business&rdquo; on Amazon is <strong>The Freedom-Based Business Method</strong> (ASIN: B0DSK7C5ZK) by Natalie Ellis. With a BSR of 33,574 and 143 reviews, it is selling 11 to 14 copies per day and generating around $2,200 per month at &pound;10.99. This is a genuinely profitable niche, not just a niche with potential. The revenue is already there.</p>
+      <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:16px;">A second title, <strong>The Wealth Creation Method</strong> (ASIN: B0GSFY5K2D) by Phil Calandra, was released in May 2026 and appears to already be running Amazon Ads with just 5 reviews. That is a meaningful signal: ad costs in this niche are low enough to justify spending before significant social proof is in place. Once Dina has her first reviews, an ad campaign here is a very low-risk, high-potential move.</p>
+      <div class="callout">
+        <strong>The ASIN opportunity:</strong> Targeting B0DSK7C5ZK directly in your Sponsored Products campaign puts your book in front of buyers already browsing the top book in the niche. High intent, proven interest, directly relevant audience. This is the most precise ad placement available in this keyword.
+      </div>
+    </div>
+    <div>
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;">Competitor Revenue: Freedom Based Business Keyword</p>
+      <table style="margin-bottom:12px;">
+        <thead><tr><th>Book</th><th class="tc">BSR</th><th class="tr">Rev / Mo</th><th class="tc">Reviews</th></tr></thead>
+        <tbody>
+          <tr><td>The Freedom-Based Business Method</td><td class="tc">33,574</td><td class="tr">~$2,200</td><td class="tc">143</td></tr>
+          <tr><td>The Wealth Creation Method <span class="badge b-orange" style="font-size:9px;">Ads Active</span></td><td class="tc">741,557</td><td class="tr">&lt;$7/day</td><td class="tc">5</td></tr>
+          <tr><td>One, Two&hellip; Free</td><td class="tc">227,696</td><td class="tr">Free</td><td class="tc">62</td></tr>
+          <tr><td>Monetize Your Message</td><td class="tc">&ndash;</td><td class="tr">&pound;3.03</td><td class="tc">64</td></tr>
+          <tr><td>Freedom By Design</td><td class="tc">1,033,036</td><td class="tr">~&pound;5</td><td class="tc">21</td></tr>
+          <tr><td>Escape the 9&ndash;5 (Dina&rsquo;s book)</td><td class="tc">522,537</td><td class="tr">&pound;0.77</td><td class="tc">0</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:10px;color:var(--muted);font-style:italic;">BSR and revenue data from Amazon keyword search, June 2026. Revenue estimated from BSR using standard conversion benchmarks.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECOND TITLE OPPORTUNITY -->
+<div class="sec-label">Second Title Opportunity</div>
+<div class="card mb" style="border-top:4px solid var(--orange);">
+  <div class="g2" style="gap:32px;align-items:start;">
+    <div>
+      <div class="card-hdr">The Next Title to Write</div>
+      <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:16px;">The keyword &ldquo;freedom based business model&rdquo; is a longer-tail, more specific phrase that buyers searching for a systematic approach to building a freedom-based business are likely to use. It is adjacent to the audience already attracted by Escape the 9&ndash;5 but targets a slightly more analytical buyer who wants a model or framework rather than a personal transformation guide.</p>
+      <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:16px;">A second book with this phrase in the title and subtitle would appear alongside Escape the 9&ndash;5 in keyword searches, creating a catalogue that doubles the shelf space on high-value search pages. Cross-selling between the two titles via Amazon Ads becomes possible once both are live and reviewed.</p>
+      <div class="callout callout-orange">
+        <strong>Why now:</strong> Dina already has a pre-order on page one. Adding a third title in the freedom-based business keyword cluster would establish a recognisable author presence across these search pages before other authors identify the same opportunity.
+      </div>
+    </div>
+    <div>
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;">Adjacent Keyword Competitor Landscape</p>
+      <table style="margin-bottom:16px;">
+        <thead><tr><th>Title</th><th class="tc">BSR</th><th class="tr">Rev / Mo</th><th class="tc">Reviews</th></tr></thead>
+        <tbody>
+          <tr><td>The Freedom-Based Business Method</td><td class="tc">33,574</td><td class="tr">~$2,200/mo</td><td class="tc">143</td></tr>
+          <tr><td>Lifestyle Business 101</td><td class="tc">&ndash;</td><td class="tr">&ndash;</td><td class="tc">139</td></tr>
+          <tr><td>Monetize Your Message</td><td class="tc">&ndash;</td><td class="tr">&ndash;</td><td class="tc">64</td></tr>
+        </tbody>
+      </table>
+      <div class="callout" style="margin-bottom:16px;">
+        <strong>The gap:</strong> No book yet owns the exact phrase &ldquo;freedom based business model&rdquo; as a primary title keyword. The dominant competitor uses &ldquo;method&rdquo; rather than &ldquo;model&rdquo;. This is a distinct enough angle to position a second title clearly and avoid direct title conflict.
+      </div>
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;">Keywords to Target for the Second Title</p>
+      <span class="kw">freedom based business model</span>
+      <span class="kw">business model for freedom</span>
+      <span class="kw">freedom business framework</span>
+      <span class="kw">lifestyle business model</span>
+      <span class="kw">online business model book</span>
+    </div>
+  </div>
+</div>
+
+<!-- ADS + KEYWORDS -->
+<div id="keywords" style="position:relative;top:-48px;"></div>
+<div class="sec-label">Keywords</div>
+<div class="g2 mb">
+  <div class="card">
+    <div class="card-hdr">Amazon Paid Advertising Opportunity</div>
+    <div class="callout" style="margin-bottom:18px;">
+      <strong>Low competition = low cost-per-click.</strong> A review of sponsored posts in your book niche on Amazon found limited activity, suggesting low advertiser competition. This means you can reach high-demand, actively searched keywords at a lower cost per click than in more crowded niches.
+    </div>
+    <div class="callout callout-orange" style="margin-bottom:18px;">
+      <strong>Get reviews before you run ads.</strong> We recommend having at least 5 genuine reviews in place before spending a penny on advertising. Without them, shoppers will scroll straight past your book regardless of how well your ad performs. Reviews are what turn clicks into sales.
+    </div>
+    <div class="item">
+      <div class="item-icon icon-orange">1</div>
+      <div>
+        <div class="item-t">Start with Sponsored Ads on automatic</div>
+        <div class="item-b">When you first set up an ad campaign, choose the automatic targeting option. This lets Amazon decide which searches to show your book for, based on its own data. It is the easiest place to start and quickly shows you which keywords are actually getting clicks and sales. Run it for two to four weeks on a budget of &pound;5 to &pound;10 per day before making any changes.</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon icon-orange">2</div>
+      <div>
+        <div class="item-t">Add manual campaigns after 4 weeks</div>
+        <div class="item-b">After 4 weeks of auto, build a manual campaign targeting: exact match on &ldquo;freedom based business book&rdquo; and &ldquo;escape the 9 to 5 book&rdquo;, broad match on &ldquo;freedom based business&rdquo;, and product ASIN target B0DSK7C5ZK (&ldquo;The Freedom-Based Business Method&rdquo;). Also test their exact title as a keyword phrase. Buyers searching for the competitor&rsquo;s book by name are the most qualified audience in this niche, and a well-matched listing can pull those clicks.</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon icon-orange">3</div>
+      <div>
+        <div class="item-t">Target 30&ndash;40% Advertising Cost of Sale (ACoS)</div>
+        <div class="item-b">In a low-competition niche, this is very achievable and profitable. Monitor weekly and optimise bids against top-converting keywords.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr">Keyword Strategy: Existing Book</div>
+    <p style="font-size:12px;color:var(--mid);margin-bottom:14px;">These are your recommended keywords to enter directly into the keyword fields inside your KDP account. Amazon gives you 7 fields. Use every one. The right keywords help your book appear in searches it would otherwise never show up in, giving you free, ongoing visibility without spending on ads.</p>
+    <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Priority Targets: Low Competition</p>
+    <div style="margin-bottom:14px;">
+      <span class="kw">freedom based business book</span>
+      <span class="kw">escape the 9 to 5 book</span>
+      <span class="kw">freedom based business</span>
+      <span class="kw">quit your job start a business</span>
+      <span class="kw">freedom based business model</span>
+    </div>
+    <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Supporting Niche Keywords</p>
+    <div style="margin-bottom:14px;">
+      <span class="kw">personal transformation business book</span>
+      <span class="kw">self help entrepreneur book</span>
+      <span class="kw">work from home business guide</span>
+      <span class="kw">financial freedom business book</span>
+      <span class="kw">escape the rat race book</span>
+      <span class="kw">how to start a freedom business</span>
+    </div>
+    <p style="font-size:10px;color:var(--muted);font-style:italic;">Focus on low competition, high demand keywords. Validate all volumes in BookBolt before committing to any paid campaign.</p>
+
+    <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--border);">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;">Self-Assessment Signals</p>
+      <table>
+        <thead><tr><th>Signal</th><th class="tc">Status</th></tr></thead>
+        <tbody>
+          <tr><td>KDP keyword fields loaded (all 7)</td><td class="tc"><span class="badge b-navy">Confirm in KDP</span></td></tr>
+          <tr><td>Review request inside book (mid and back)</td><td class="tc"><span class="badge b-navy">Check Manuscript</span></td></tr>
+          <tr><td>Amazon Ads active</td><td class="tc"><span class="badge b-orange">Not Active</span></td></tr>
+          <tr><td>Pricing reviewed against market</td><td class="tc"><span class="badge b-navy">Worth Reviewing</span></td></tr>
+          <tr><td>Paperback / Hardback edition</td><td class="tc"><span class="badge b-orange">Kindle Only</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK WINS -->
+<div id="quick-wins" style="position:relative;top:-48px;"></div>
+<div class="sec-label">Quick Wins</div>
+<div class="card mb">
+  <div class="card-hdr">Ranked by Priority</div>
+  <div class="step step-teal">
+    <div class="step-num num-teal">1</div>
+    <div>
+      <div class="step-t">Confirm all 7 KDP keyword fields are fully loaded</div>
+      <div class="step-b">Open your KDP account and verify that every one of the 7 keyword fields is filled with a phrase from the Keywords section of this audit. Confirming all seven fields are fully loaded takes 10 minutes and costs nothing. Start with &ldquo;freedom based business book&rdquo; in field one.</div>
+    </div>
+  </div>
+  <div class="step step-orange">
+    <div class="step-num num-orange">2</div>
+    <div>
+      <div class="step-t">Get your first 5 reviews before running ads</div>
+      <div class="step-b">Your book is already being found for &ldquo;freedom based business&rdquo;. The missing piece is what happens when a buyer lands on your listing and sees zero social proof. Submit your book to BookSirens or Hidden Gems today. Add a genuine review request at the midpoint and end of your manuscript. Target 5 reviews as the minimum before activating any ad spend. This is the single highest-impact action available right now.</div>
+    </div>
+  </div>
+  <div class="step step-orange">
+    <div class="step-num num-orange">3</div>
+    <div>
+      <div class="step-t">Is your pricing aligned with the market?</div>
+      <div class="step-b">The top-performing book for &ldquo;freedom based business&rdquo; is priced at &pound;10.99 and generating around &pound;220 per month. At &pound;0.77, your royalty per sale is minimal even with reasonable volume. Pricing is your decision and depends on your strategy, but it is worth reviewing once your reviews are in place and before your ads go live.</div>
+    </div>
+  </div>
+  <div class="step step-orange">
+    <div class="step-num num-orange">4</div>
+    <div>
+      <div class="step-t">Target the category leader with Sponsored Products</div>
+      <div class="step-b">Once you have reviews, launch a Sponsored Products campaign with ASIN target B0DSK7C5ZK (&ldquo;The Freedom-Based Business Method&rdquo;). This puts your book directly on the product page of the highest-ranked title in your niche, in front of buyers already interested in exactly this topic. Also target their title as an exact keyword phrase in a separate manual campaign.</div>
+    </div>
+  </div>
+  <div class="step step-teal">
+    <div class="step-num num-teal">5</div>
+    <div>
+      <div class="step-t">Plan &ldquo;Freedom Based Business Model&rdquo; as your next title</div>
+      <div class="step-b">This keyword was identified in this audit as a more profitable adjacent opportunity. A second book targeting this phrase would sit alongside Escape the 9&ndash;5 on keyword search pages, cross-sell readers between titles, and establish you as the go-to author in the freedom-based business space on Amazon.</div>
+    </div>
+  </div>
+</div>
+
+<!-- JORDAN'S OBSERVATION -->
+<div class="sec-label">Jordan&rsquo;s Observation</div>
+<div class="card mb">
+  <p style="font-size:13px;color:var(--mid);line-height:1.85;margin-bottom:16px;">Dina, the most important thing to tell you first is this: your book is being found for &ldquo;freedom based business&rdquo; with zero reviews and a brand new listing. That is not typical. It tells us your title, subtitle, and positioning are doing exactly what they need to do. Amazon has already decided your book belongs in this search. That is a genuinely strong foundation to build on.<br><br>The work now is on conversion, not visibility. A buyer who finds your listing today sees no reviews and is likely to click elsewhere. Getting to five genuine reviews from real readers is the single most important thing you can do right now. An ARC service like BookSirens or Hidden Gems is the right approach. It is fast, legitimate, and fully within Amazon&rsquo;s terms of service.<br><br>When you are ready to advertise, there is something in the data worth noting: a second book in this niche called &ldquo;The Wealth Creation Method&rdquo; (B0GSFY5K2D) launched in May 2026 and appears to already be running Amazon Ads with just 5 reviews. That matters. It tells us the cost-per-click in this niche is low enough to justify early ad spend, before most authors would consider it. That changes the calculus slightly. You may not need to wait as long as usual before testing ads, but I would still recommend at least 5 genuine reviews first to give the listing credibility when a buyer clicks through.<br><br>The dominant competitor, &ldquo;The Freedom-Based Business Method&rdquo; (B0DSK7C5ZK), has 143 reviews, is selling 11 to 14 copies per day, and generating around $2,200 per month. This is not a low-revenue niche with potential. The money is already there. Your first campaign should target that ASIN as a product placement, putting your book on their product page in front of buyers who have already decided they want exactly this kind of book.<br><br>The pricing question is one only you can answer. At &pound;0.77, you are limiting your royalties regardless of volume. The market is clearly willing to pay considerably more. But get the reviews in first, then revisit pricing before you activate ads. Changing price at the same time as launching ads makes it harder to know what is driving any change in performance.<br><br>The second title opportunity is real and worth planning now. &ldquo;Freedom Based Business Model&rdquo; is a natural next book. A more profitable keyword, a cleaner positioning angle, and it sits directly alongside this one on the same search pages. Your pre-order demonstrates you are already thinking in catalogue terms. That is exactly the right instinct.</p>
+  <div style="margin-top:16px;background:var(--navy);border-radius:4px;padding:14px 18px;font-size:12px;color:#fff;line-height:1.65;"><span style="color:var(--teal);font-weight:700;">Note from Jordan:</span> I would welcome the opportunity to support you on your publishing journey.<br><br>Whether you are looking for free coaching support or a managed service, I can help you with a review strategy, sponsored ad campaigns, editing, formatting, cover design and more.<br><br>Please feel free to send me a direct message if you&rsquo;d like to explore further.</div>
+</div>
+
+</div><!-- /wrap -->
+
+<div class="ftr">
+  Book Opportunity Audit &nbsp;&middot;&nbsp; Escape the 9&ndash;5 &nbsp;&middot;&nbsp; June 2026 &nbsp;&middot;&nbsp; Confidential
+</div>
+
+<script>
+(function() {
+  var nav = document.querySelector('nav.site-nav');
+  if (!nav) return;
+  var navLinks = Array.from(nav.querySelectorAll('a[href^="#"]'));
+  var sectionIds = navLinks.map(function(a) { return a.getAttribute('href').slice(1); });
+
+  function getActiveId() {
+    var scrollY = window.scrollY + 150;
+    var active = sectionIds[0];
+    sectionIds.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top + window.scrollY <= scrollY) {
+        active = id;
+      }
+    });
+    return active;
+  }
+
+  function updateNav() {
+    var activeId = getActiveId();
+    navLinks.forEach(function(a) {
+      var href = a.getAttribute('href').slice(1);
+      a.classList.toggle('active', href === activeId);
+    });
+  }
+
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+})();
+</script>
+</body>
+</html>
